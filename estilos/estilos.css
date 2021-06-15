@@ -1,0 +1,123 @@
+body
+{
+
+   background-color: rgb(155, 39, 67);
+   justify-content: center;
+
+}
+
+footer
+{
+
+   background-color: rgb(218, 167, 0);
+
+}
+
+article{
+
+   font-size: 30px;      
+
+}
+
+details
+{
+
+   vertical-align: top;   
+
+}
+
+section
+{
+      
+   text-align: center;
+   font-size: 45px;
+   justify-content: center;   
+
+}
+
+label{
+
+   color: white;
+
+}
+
+header 
+{
+
+   color: white;
+   font-size: 70px;
+
+}
+
+#introRanking
+{
+
+   background-color: rgb(204, 0, 102);
+   size: 50%;
+
+}
+
+.menuPrinci, form
+{
+
+   display:flex;
+   flex-direction: column;
+   align-items: center;     
+
+}
+
+#instrucGlob{
+
+   display:flex;
+   flex-direction: row;    
+
+}
+
+#fotoCara
+{
+
+   width: 10%;
+   height: 10%;
+
+}
+
+.sideButton
+{
+
+   background-color: rgb(204, 0, 102);
+   width: 70px;
+   height: 40px;
+   font-size: 15px;
+   margin-left: 73%;
+
+}
+
+.instrucColumn
+{
+
+   background-color: rgb(218, 167, 0);
+   display:flex;
+   flex-direction: column;   
+   width: 25%;  
+   
+   
+}
+
+.instrucColumn > article{
+
+   border-style: solid;
+   
+}
+
+.menuButton
+{
+
+   background-color: rgb(218, 167, 0);
+   width: 260px;
+   height: 120px;   
+   margin-bottom: 10px;
+   font-size: 30px;
+   color: black;
+   align-self: center;
+   
+}

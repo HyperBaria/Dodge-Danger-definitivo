@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="javascripts/phaser.js"></script>
+    
+    
+</head>
+<body>
+
+    <script>
+
+    
+
+    var config = {
+        type: Phaser.AUTO,
+        width: 1280,
+        height: 720,
+        physics: {
+            default: 'arcade'
+            
+            
+        },       
+        scene: {
+            preload: preload,
+            create: create,
+            update: update,
+            extend:{
+ 
+                hitEnemy: hitEnemy,
+                generarEnemigos: generarEnemigos,
+                esquivadas: esquivadas,
+                createParticlesHit: createParticlesHit
+                
+                
+            }
+
+        },
+        fps: {
+
+            min: 10,
+            target: 60
+
+        }
+    };
+
+    var juego = new Phaser.Game(config);    
+
+    var vidas = 10; 
+
+    var contrincante;
+
+    var enemigos;     
+     
+    var velocidadEnemigos =  7;        
+    
+    var puntuacion;
+
+    var scoreText;
+
+    var particulas;     
+
+    var muro;
+
+    var avisoVidas;
+
+    var esquivaActivada;
+
+    var colisionActivada;
+
+    var minEnemigos = 1;
+
+    var maxEnemigos =  1; 
+   
+    const medio = 2;    
+    
+    const anchuraEnemigo = 89;   
+           
+        
+
+    function preload ()
+    {
+
+        this.load.image('fondo', 'assets/fondo.jpg');
+        this.load.image('jugador', 'assets/jugador.png');
+        this.load.image('enemigo', 'assets/enemigo.png');   
+        this.load.image('particula', 'assets/particula.png');      
+
+    }
+
+    function create ()
+    {
+
+        //colisionActivada = true;  
+
+        this.add.image(config.width / medio, config.height / medio, 'fondo');        
+        
+        player = this.physics.add.image(48, config.height / medio, 'jugador');         
+                
+        //Añadir teclas
+        up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+
+        down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+
+        left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+
+        right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
+        enemigos = this.physics.add.group(
+            {
+                
+                defaultKey: 'enemigo',
+                maxSize: 7
+
+
+            }
+        );      
+                
+                    
+                    
+        
+        puntuacion = -1;
+
+        scoreText = this.add.text(16, 16, 'Esquivados: 0', {fontSize: '32px', fill:'#FFF'});
+
+        avisoVidas = this.add.text(0, config.height/medio, '', {fontSize: '32px', fill:'#FFF'});
+        
+        particulas = this.add.particles('particula');                        
+    
+        this.time.addEvent({
+        delay: 450,
+        loop: true,
+            callback: () => 
+            {
+               this.generarEnemigos()
+            }
+        });            
+        
+
+        let creacion = 0;     
+
+        createParticlesHit(); 
+
+        
+        
+        muro = this.add.zone(-30, config.height/2).setSize(1, config.height);
+
+        this.physics.world.enable(muro);           
+        
+        muro.body.moves = false;    
+
+        
+
+        this.physics.add.collider(enemigos, muro, this.esquivadas, ()=>
+        {
+                
+                
+                return esquivaActivada;
+
+        }, this);
+
+        
+
+
+        this.physics.add.overlap(player, enemigos, this.hitEnemy, null, this);  
+                
+
+    }
+            
+    
+
+    function update (time, delta)
+    {  
+        
+        
+        Phaser.Actions.IncX(enemigos.getChildren(), -velocidadEnemigos);  
+        
+
+        enemigos.children.iterate(function (enemigo)
+        {
+      
+            if (enemigo.x < 0 && enemigo.active)
+            {
+
+            
+                enemigos.killAndHide (enemigo);            
+                enemigo.setActive(false);
+                enemigo.setVisible(false);            
+                esquivaActivada = true;
+                      
+           
+
+            }  
+
+
+       });
+
+        //inputs      
+        
+ 
+        if (up.isDown && player.y > 0)
+        {
+
+            player.body.setVelocityY(-600);
+            
+
+        }
+        else if (down.isDown && player.y < config.height)
+        {
+
+            player.body.setVelocityY(600);            
+
+        }        
+        else
+        {            
+            
+            player.body.setVelocityY(0);
+
+        }   
+
+         
+        
+        
+    }
+    
+    function esquivadas (muro, enemigo)
+    {
+
+            puntuacion++;
+            scoreText.setText("Esquivados:" + puntuacion);                 
+            if (velocidadEnemigos < 25)
+            {
+
+                velocidadEnemigos += 0.1;
+
+            }       
+            
+            esquivaActivada = false;  
+
+    }
+
+    
+
+    function generarEnemigos()
+    {
+        var numeroEnemigos = Phaser.Math.Between(minEnemigos, maxEnemigos)
+        
+
+        for (let generador = 0; generador < numeroEnemigos; generador++)
+        {
+
+            var enemigo = enemigos.get();
+
+            if (enemigo)
+            {
+
+                enemigo.setActive(true).setVisible(true);               
+                enemigo.y = player.y;                
+                enemigo.x = config.width + anchuraEnemigo;              
+
+            }
+
+
+        }
+
+
+
+    }        
+
+    
+
+    function hitEnemy (jugador, enemigo)
+    {     
+            
+             
+        let posX = enemigo.x ; 
+
+        let posY = enemigo.y;
+        if(enemigo.active)
+        {
+
+            particulas.emitParticleAt(posX, posY, 700);            
+            enemigos.killAndHide(enemigo);
+            enemigo.setActive(false);            
+            enemigo.setVisible(false);            
+            vidas--; 
+
+        }
+
+        switch (vidas)
+        {
+
+            case 9:
+            case 8:
+            case 7:
+                avisoVidas.setText("Una rascadita de nada"); 
+                break;
+            case 6:
+            case 5:
+                avisoVidas.setText("No debiste de bajar la guardia");
+                break;
+            case 4:
+            case 3:
+            case 2:
+                avisoVidas.setText("Te la estás jugando mucho");
+                break;
+            case 1:
+                avisoVidas.setText("Mejor preparo ya el ataúd?");
+                break;
+            case 0:
+                document.cookie="puntuacionFinal="+puntuacion;
+                window.location="endgame.php";
+                break;
+
+        }
+
+  
+        
+
+       
+       
+
+    }
+
+    function createParticlesHit ()
+    { 
+        
+        var emisor = particulas.createEmitter(
+        {
+
+            
+        	speed: 100,
+        	lifespan: 500,
+        	//blendMode: 'ADD',
+            scale: {start: 1, end: 1},                    	
+            on: false,
+
+        });  
+        
+
+             
+        
+        
+    }    
+
+    </script>
+
+</body>
+</html>
