@@ -10,3 +10,5 @@ create table top10(
    posicion tinyint
 
 );
+
+

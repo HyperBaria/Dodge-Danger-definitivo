@@ -5,44 +5,65 @@
     
     require_once("funGlobCons.php");    
 
-    $resultado = consulSelec ("*", "top10")
+    $resultado = consulSelec ("*", "top10");
 
     $_SESSION["filas"] = mysqli_num_rows($resultado);
+
+    
 
     if ($_SESSION["filas"] == 0)
     {
 
-        header ("url=elite.html");                       
+        
+        header ('Location: ../elite.php');
+                             
 
     }
-    else if ($_SESSION["filas"] < 10 && $_SESSION["filas"] > 0)
+    else if ($_SESSION["filas"] > 0 && $_SESSION["filas"] < 10)
     {
 
+        
+     
+        $resultado = consulSelec ("*", "top10", " where puntuacion < ".$_COOKIE["puntuacionFinal"]);  
+        
+        
+        if (mysqli_num_rows($resultado) > 0)
+        {            
 
-        $_SESSION["resultado"] == $resultado = consulSelec ("*", "top10", " where puntuacion > ".$_COOKIE["puntuacionFinal"]);
-        header ("url=elite.html"); 
+            $fila = mysqli_fetch_array($resultado);
+            extract($fila);
+            $_SESSION["posicion"] = $posicion;            
 
+        } 
+              
+        header ('Location: ../elite.php'); 
 
     }
-    else if ($_SESSION["filas"] == 10)
+    else 
     {
 
-        $resultado = consulSelec("*", "top10", " where puntuacion > ".$_COOKIE["puntuacionFinal"]);
+        $resultado = consulSelec("*", "top10", " where puntuacion < ".$_COOKIE["puntuacionFinal"]);
+        
 
-        $_SESSION["adelantadas"] = mysqli_num_rows($resultado);
-
-        if ($_SESSION["adelantadas"] > 0)
+        
+        if (mysqli_num_rows($resultado) > 0)
         {
 
-            header ("url=elite.html"); 
+
+            $fila = mysqli_fetch_array($resultado);
+            extract($fila);
+            $_SESSION["posicion"] = $posicion;
+            header ('Location: ../elite.php'); 
 
         }
         else  
         {
 
-            header ("url=mejoraTuJuego.html");
+            header ('Location: ../mejoraTuJuego.php');            
 
-        }   
+        }  
+        
+        
 
     }
 

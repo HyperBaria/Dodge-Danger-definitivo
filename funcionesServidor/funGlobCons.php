@@ -3,7 +3,7 @@
 
     	
 
-    function registrosAdd ($tabla ,$campos, $values)
+    function registrosAdd ($tabla ,$campos, $values = "")
     {	    		
 
 		require("datos.php");
@@ -19,31 +19,38 @@
 	
     }
 	
-	function modifi ($con ,$tabla, $campo, $valor, $condicion)
+	function modifi ($tabla, $campo, $valor, $condicion = "")
 	{
+
+		require("datos.php");
+	   
+	    $con = mysqli_connect($host, $user, $pass, $db_name) or die("No se ha podido conectar a la base de datos");
 		
 		$consulta = "update ".$tabla." set " .$campo. "=".$valor." ".$condicion;        	
 		
-		$resultado = mysqli_query ($con, $consulta);   		
+		$resultado = mysqli_query ($con, $consulta);   	
+		
+		mysqli_close($con);
 					
 	}
 	
 	
-	function eliminar ($con ,$tabla, $condicion)
+	function eliminar ($tabla, $condicion = "")
 	{
+
+		require("datos.php");
+	   
+	    $con = mysqli_connect($host, $user, $pass, $db_name) or die("No se ha podido conectar a la base de datos");
 		
 		$consulta = "delete from ".$tabla." where ".$condicion;
 		
-		$resultado = mysqli_query ($con, $consulta);	
-		
-		
-
-        mysqli_close($con);
-			
+		$resultado = mysqli_query ($con, $consulta);		
+				
+        mysqli_close($con);						
 		
 	}
 
-   function consulSelec ($campos, $tabla, $condicion= "")
+   function consulSelec ($campos, $tabla, $condicion = "")
    {   
 	   
 	   require("datos.php");

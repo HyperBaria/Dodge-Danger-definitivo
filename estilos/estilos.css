@@ -49,6 +49,25 @@ header
 
 }
 
+table
+{
+  
+   border: rgb(251, 221, 122) ;
+   color: white;
+   
+   
+
+
+}
+
+article > table
+{
+
+   display: grid;
+   justify-content: center;
+
+}
+
 #introRanking
 {
 
@@ -121,3 +140,5 @@ header
    align-self: center;
    
 }
+
+
