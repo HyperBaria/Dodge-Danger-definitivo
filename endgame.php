@@ -20,12 +20,12 @@
             </header>
 							
             <figure>
-				<img src="fotos/gameOver.jpg" alt="Imágen de calavera game over"/>					
+				<img id="imgMuerte" src="fotos/gameOver.jpg" alt="Imágen de calavera game over" />					
 			</figure>
 
 			
 			
-        <button class="menuButton" onclick="pasarPagina('funcionesServidor/dirigiPagina.php');">Entras a la élite de putos amos?</button>
+        <button class="menuButton" id ="buttonMisterio" onclick="pasarPagina('funcionesServidor/dirigiPagina.php');">Entras a la élite de putos amos?</button>
     	</section>
 	</main>
 

@@ -111,7 +111,7 @@
             {
                 
                 defaultKey: 'enemigo',
-                maxSize: 7
+                maxSize: 6
 
 
             }
@@ -144,7 +144,7 @@
 
         
         
-        muro = this.add.zone(-30, config.height/2).setSize(1, config.height);
+        muro = this.add.zone(-22, config.height/2).setSize(1, config.height);
 
         this.physics.world.enable(muro);           
         
@@ -199,14 +199,14 @@
         //inputs      
         
  
-        if (up.isDown && player.y > 0)
+        if (up.isDown && player.y > player.height * 1.5)
         {
 
             player.body.setVelocityY(-600);
             
 
         }
-        else if (down.isDown && player.y < config.height)
+        else if (down.isDown && player.y < config.height - player.height/2)
         {
 
             player.body.setVelocityY(600);            
@@ -229,12 +229,14 @@
 
             puntuacion++;
             scoreText.setText("Esquivados:" + puntuacion);                 
-            if (velocidadEnemigos < 25)
+            if (velocidadEnemigos < 30)
             {
 
                 velocidadEnemigos += 0.1;
 
-            }       
+            }      
+            
+            console.log(velocidadEnemigos);
             
             esquivaActivada = false;  
 
